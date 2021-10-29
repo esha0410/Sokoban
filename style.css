@@ -1,19 +1,25 @@
+@font-face {
+  font-family: 'Fruktur-Regular';
+  src: url(../fonts/Fruktur-Regular.ttf);
+}
 html, body {
     height: 100%;
     margin: 0;
   }
 
   body {
-    background: rgb(82, 80, 80);
+    background-image: url("images/back2.jpg");
     display: flex;
     align-items: center;
     justify-content: center;
+    position:relative;
   }
 
-  .content button {
-    background-color: #95ff00; 
-    position:relative; 
-    left:100px; top:0px;
+  .undo button {
+    background:url(images/undo1.png);
+    background-size:150px 100px; 
+    position:absolute; 
+    left:1200px; top:250px;
     border: none;
     color: white;
     padding: 15px 32px;
@@ -21,5 +27,64 @@ html, body {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    height:100px;
+    width: 150px;
+  }
+  .play button {
+    background:url(images/play_button.png); 
+    position:absolute; 
+    background-size:150px 100px;
+    left:1200px; top:400px;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    height:100px;
+    width:150px;
+  }
+  
+  .moves{
+    left:250px; top:250px;
+    position:absolute; 
+  }
+  .diamond{
+    left:250px; top:350px;
+    position:absolute; 
+  }
+  img{
+    width:150px;
+    height:100px;
+    position:absolute;
+  }
+  .steps{
+    left:90px; top:200px;
+    position:absolute; 
+    width:150px;
+    height:100px;
+  }
+  .dpic{
+    left:70px; top:330px;
+    position:absolute; 
+    width:150px;
+    height:100px;
+  }
+  #mytext{
+    background: transparent;
+    font-family: fantasy;
+    height:50px;
+    width:100px;
+    font-size:70px;
+    border: none;
+  }
+  #myblock{
+    background: transparent;
+    font-family: fantasy;
+    height:50px;
+    width:100px;
+    font-size:70px;
+    border: none;
   }
   

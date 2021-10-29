@@ -7,12 +7,14 @@ const grid = 64;
 // canvas to draw the images later on
 const wallCanvas = document.createElement('canvas');
 const wallCtx = wallCanvas.getContext('2d');
+var moves=0;
+var desired_block=10;
 wallCanvas.width = wallCanvas.height = grid;
 
 //adding bricks 
-wallCtx.fillStyle = '#288500';
+wallCtx.fillStyle = '#808080';
 wallCtx.fillRect(0, 0, grid, grid);
-wallCtx.fillStyle = '#95ff00';
+wallCtx.fillStyle = '#383838';
 
 // 1st row brick
 wallCtx.fillRect(1, 1, grid - 2, 20);
@@ -205,13 +207,15 @@ function loop() {
       if (cell === types.block || cell === types.blockOnGoal) {
         if (cell === types.block) {
           //blocks context
-          context.fillStyle = 'yellow';
+          context.fillStyle = '#805500';
+          
 
           // block is not on goal
           allBlocksOnGoals = false;
         }
         else {
-          context.fillStyle = '#ff8b05';
+          context.fillStyle = '#99bbff';
+          
         }
 
         context.fillRect(col * grid, row * grid, grid, grid);
@@ -229,7 +233,7 @@ function loop() {
 
       if (cell === types.goal || cell === types.playerOnGoal) {
         //goal dots
-        context.fillStyle = '#ff8b05';
+        context.fillStyle = '#cc0000';
         context.beginPath();
         context.arc((col + 0.5) * grid, (row + 0.5) * grid, 10, 0, Math.PI * 2);
         context.fill();
@@ -260,6 +264,13 @@ function loop() {
   if (allBlocksOnGoals) {
     showWin();
   }
+  
+  if(cell === types.blockOnGoal)
+  {
+    desired_block=desired_block+1;
+  }
+  document.getElementById("mytext").value=moves;
+  document.getElementById("myblock").value=desired_block;
 }
 
 // listen to keyboard events to move the snake
@@ -269,18 +280,22 @@ document.addEventListener('keydown', function(e) {
   // left arrow key
   if (e.which === 37) {
     playerDir.col = -1;
+    moves=moves+1;
   }
   // up arrow key
   else if (e.which === 38) {
     playerDir.row = -1;
+    moves=moves+1;
   }
   // right arrow key
   else if (e.which === 39) {
     playerDir.col = 1;
+    moves=moves+1;
   }
   // down arrow key
   else if (e.which === 40) {
     playerDir.row = 1;
+    moves=moves+1;
   }
 });
 
