@@ -1,17 +1,16 @@
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 
-const grid = 64;
-
+const grid = 64
+var moves=0;
+var desired_block=10;
+var moves_track= new Array()
 // create a new canvas and draw the wall image. then we can use this
 // canvas to draw the images later on
 const wallCanvas = document.createElement('canvas');
 const wallCtx = wallCanvas.getContext('2d');
-var moves=0;
-var desired_block=10;
 wallCanvas.width = wallCanvas.height = grid;
 
-//adding bricks 
 wallCtx.fillStyle = '#808080';
 wallCtx.fillRect(0, 0, grid, grid);
 wallCtx.fillStyle = '#383838';
@@ -48,23 +47,56 @@ const types = {
 };
 
 // a sokoban level using the sok file format
+
 const level1 = `
-  #####
-###   #
-#.@$  #
-### $.#
-#.##$ #
-# # . ##
-#$ *$$.#
-#   .  #
-########
+#######
+#     #
+#. $  #
+#     #
+#    @#
+#######
 `;
 
+const level2 = `
+#######
+#    .#
+#     #
+#  #  #
+#  #  #
+# $#  #
+#  # @#
+#######
+`;
+
+const level3 = `
+#######
+#     #
+#     #
+#. #  #
+#. $$ #
+#.$$  #
+#.#  @#
+#######
+`;
+
+var current;
+
+if(window.name==2)
+{
+  current=level2
+}
+else if(window.name==3)
+{
+  current=level3
+}
+else
+{
+  current=level1
+}
 // keep track of what is in every cell of the game using a 2d array
 const cells = [];
-
 // use each line of the level as the row (remove empty lines)
-level1.split('\n')
+current.split('\n')
   .filter(rowData => !!rowData)
   .forEach((rowData, row) => {
     cells[row] = [];
@@ -126,6 +158,7 @@ function move(startPos, endPos) {
   }
 }
 
+
 // show the win screen
 function showWin() {
   cancelAnimationFrame(rAF);
@@ -140,10 +173,14 @@ function showWin() {
   context.textAlign = 'center';
   context.textBaseline = 'middle';
   context.fillText('YOU WIN!', canvas.width / 2, canvas.height / 2);
+
+  //document.getElementById("nextlevel").disabled = false;
+  document.getElementById("nextlevel").style.display = "block";
 }
 
 // game loop
 function loop() {
+  
   rAF = requestAnimationFrame(loop);
   context.clearRect(0,0,canvas.width,canvas.height);
 
@@ -157,7 +194,7 @@ function loop() {
     case types.empty:
     case types.goal:
       move(playerPos, { row, col });
-
+      moves=moves+1;
       playerPos.row = row;
       playerPos.col = col;
       break;
@@ -178,7 +215,7 @@ function loop() {
         // move the block first, then the player
         move({ row, col }, { row: nextRow, col: nextCol });
         move(playerPos, { row, col });
-
+        moves=moves+1;
         playerPos.row = row;
         playerPos.col = col;
       }
@@ -194,7 +231,8 @@ function loop() {
   // draw the board. because multiple things can be drawn on the same
   // cell we shouldn't use a switch as that would only allow us to draw
   // a single thing per cell
-  context.strokeStyle = 'black';      //outlines i.e. strokes of boxes and man avatar
+  
+  context.strokeStyle = 'black';
   context.lineWidth = 2;
   for (let row = 0; row < cells.length; row++) {
     for (let col = 0; col < cells[row].length; col++) {
@@ -206,16 +244,13 @@ function loop() {
 
       if (cell === types.block || cell === types.blockOnGoal) {
         if (cell === types.block) {
-          //blocks context
           context.fillStyle = '#805500';
-          
 
           // block is not on goal
           allBlocksOnGoals = false;
         }
         else {
           context.fillStyle = '#99bbff';
-          
         }
 
         context.fillRect(col * grid, row * grid, grid, grid);
@@ -232,7 +267,6 @@ function loop() {
       }
 
       if (cell === types.goal || cell === types.playerOnGoal) {
-        //goal dots
         context.fillStyle = '#cc0000';
         context.beginPath();
         context.arc((col + 0.5) * grid, (row + 0.5) * grid, 10, 0, Math.PI * 2);
@@ -240,7 +274,6 @@ function loop() {
       }
 
       if (cell === types.player || cell === types.playerOnGoal) {
-        //avatar code
         context.fillStyle = 'black';
         context.beginPath();
 
@@ -264,8 +297,8 @@ function loop() {
   if (allBlocksOnGoals) {
     showWin();
   }
-  
-  if(cell === types.blockOnGoal)
+
+  if(allBlocksOnGoals)
   {
     desired_block=desired_block+1;
   }
@@ -273,31 +306,159 @@ function loop() {
   document.getElementById("myblock").value=desired_block;
 }
 
-// listen to keyboard events to move the snake
+function solve(test)
+{
+    switch (test) 
+    {
+      case 'L':
+        playerDir.col = -1;
+        break;
+      
+      case 'R':
+        playerDir.col = 1;
+        break;
+        
+      case 'U':
+          playerDir.row = -1;
+          break;
+          
+      case 'D':
+          playerDir.row = 1;
+          break;
+
+      default:
+        break;
+    } 
+}
+
+function convert(l)
+{
+  for(let i=0; i<l.length; i++)
+  {
+    l=l.replace('#','w')
+    l=l.replace('\n','x')
+  }
+  
+  return l
+}
+
+var solution=""
+var interval;
+function send_level(lev)
+{
+  l=convert(lev)
+  let userInfo = {'level' : l}
+  const request = new XMLHttpRequest()
+  request.open('POST',`/processUserInfo/${JSON.stringify(userInfo)}`)
+  request.onload = () => {
+  solution = request.responseText
+  solution=solution.toUpperCase()
+  console.log(solution)
+  }
+request.send()
+}
+
+interval = setInterval("getResult()", 1000);
+
+function getResult()
+{
+
+ if(solution != "")
+ {
+ interval = clearInterval(interval);
+ 
+ requestAnimationFrame(loop);
+ }
+}
+
+var i=0;
+// listen to keyboard events to move the player
 document.addEventListener('keydown', function(e) {
   playerDir = { row: 0, col: 0};
 
   // left arrow key
   if (e.which === 37) {
     playerDir.col = -1;
-    moves=moves+1;
+    moves_track.push('l')
   }
   // up arrow key
   else if (e.which === 38) {
     playerDir.row = -1;
-    moves=moves+1;
+    moves_track.push('u')
   }
   // right arrow key
   else if (e.which === 39) {
     playerDir.col = 1;
-    moves=moves+1;
+    moves_track.push('r')
   }
   // down arrow key
   else if (e.which === 40) {
-    playerDir.row = 1;
-    moves=moves+1;
+    playerDir.row = 1
+    moves_track.push('d')
   }
 });
+var c=0;
+send_level(current)
+function play()
+{
+  moves=moves-1
+  desired_block=desired_block-1
+  if(moves>0)
+  {
+    moves=moves-1
+  }
+  solve(solution[i]);  
 
+  i=i+1;
+}
+
+function undo()
+{
+
+  if(moves>0)
+  {
+    moves=moves-1
+  }
+  
+  switch (moves_track.pop()) 
+  {
+    case 'l':
+      solve('R')
+      moves=moves-1
+      break;
+
+    case 'r':
+      solve('L')
+      moves=moves-1
+      break;
+    
+    case 'u':
+      solve('D')
+      moves=moves-1
+      break;
+    
+    case 'd':
+      solve('U')
+      moves=moves-1
+      break;
+    default:
+      break;
+  } 
+  
+}
+
+function next()
+{
+  current=level2
+  if(window.name==2)
+  {
+    window.name=3
+  }
+  else
+  {
+    window.name=2;
+  }
+ 
+  location.reload()
+}
 // start the game
-requestAnimationFrame(loop);

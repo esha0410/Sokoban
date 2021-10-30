@@ -8,7 +8,7 @@ html, body {
   }
 
   body {
-    background-image: url("images/back2.jpg");
+    background-image: url("/static/images/back2.jpg");
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,7 +16,7 @@ html, body {
   }
 
   .undo button {
-    background:url(images/undo1.png);
+    background:url('/static/images/undo1.png');
     background-size:150px 100px; 
     position:absolute; 
     left:1200px; top:250px;
@@ -31,7 +31,7 @@ html, body {
     width: 150px;
   }
   .play button {
-    background:url(images/play_button.png); 
+    background:url('/static/images/play_button.png'); 
     position:absolute; 
     background-size:150px 100px;
     left:1200px; top:400px;
@@ -45,7 +45,21 @@ html, body {
     height:100px;
     width:150px;
   }
-  
+  .nextlevel button {
+    background:url('/static/images/next.png'); 
+    position:absolute; 
+    background-size:150px 100px;
+    left:1200px; top:600px;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    height:100px;
+    width:150px;
+  }
   .moves{
     left:250px; top:250px;
     position:absolute; 

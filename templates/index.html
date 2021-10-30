@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sokoban</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Henny+Penny&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Henny+Penny&family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body onload='document.getElementById("nextlevel").style.display = "none";'>
+<canvas width="400" height="400" id="game"></canvas>
+<script src="{{url_for('static', filename='sokoban.js')}}"></script>
+<div class="undo">
+  <button type="submit" onclick="undo()"></button>
+</div> 
+<div class="play">
+    
+  <button type="submit" onclick="play()"></button>
+</div>
+<div class="nextlevel">
+    
+  <button id='nextlevel' type="submit" onclick="next()" ></button>
+</div>
+<div>
+  <label id="welcome" class="welcome" style="left:90px; 
+top:35px;
+position:absolute;
+font-family:'Press Start 2P', cursive; font-size: 30px;">Welcome to the game {{usr}}</label>
+
+<img src="{{url_for('static', filename='images/steps1.png')}}" class="steps"> 
+<form>
+  <div class="moves">
+<input type="text" id="mytext">
+</div>
+<img src="{{url_for('static', filename='images/diamond2.png')}}" class="dpic"> 
+<div class="diamond">
+  <input type="text" id="myblock">
+  </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sokoban</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{{url_for('static', filename='style_login.css')}}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Henny+Penny&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Henny+Penny&family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body> 
+  <h1 style="font-family: 'Press Start 2P', cursive;
+  position: absolute;
+  left:250px;
+  top:100px;
+  font-size:40px;">WELCOME TO  THE  SOKOBAN  GAME</h1><br>
+<form action="/index" method="post">
+    <label style = "font-family:'Press Start 2P', cursive;
+    font-size:20px;
+    font-style:bold;
+    position: absolute;
+    left: 450px;
+    top: 350px;">Enter your name:</label>
+    <input style = "
+    position: absolute;
+    left: 800px;
+    top: 330px;
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+   box-sizing: border-box;
+    border: 1px solid black;
+    font-family:'Press Start 2P', cursive;
+    outline: none;
+    " type="text" name="username"><br>
+    <br><br><input type="submit" value="Play Game" style="position: absolute;
+    left: 600px;
+    top: 400px;
+    background-color: black;
+    font-color:white;
+    font-family:'Press Start 2P', cursive;
+    transition: background-color 0.1s ease-in-out;">
+    </form>
+
+
+</body>
+</html>
