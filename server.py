@@ -3,12 +3,13 @@ from collections import deque
 import json
 
 
-data = []
-nrows = 0
-px = py = 0
-sdata = ""
-ddata = ""
+data = [] #list containing row as each item
+nrows = 0 #length of longest row
+px = py = 0 #player position
+sdata = "" #source data
+ddata = "" #destinaton data
 
+#initialize the data
 def init(board):
     global data, nrows, sdata, ddata, px, py
     data = [_f for _f in board.split('x') if _f]
@@ -24,16 +25,19 @@ def init(board):
             if ch == '@':
                 px = c
                 py = r
- 
+
+#to make next move
 def push(x, y, dx, dy, data):
+
+    #if player or box runs into wall then dont make move
     if sdata[(y+2*dy) * nrows + x+2*dx] == '#' or \
        data[(y+2*dy) * nrows + x+2*dx] != ' ':
         return None
- 
+    #else make move
     data2 = list(data)
-    data2[y * nrows + x] = ' '
-    data2[(y+dy) * nrows + x+dx] = '@'
-    data2[(y+2*dy) * nrows + x+2*dx] = '*'
+    data2[y * nrows + x] = ' ' #set current player position to blank
+    data2[(y+dy) * nrows + x+dx] = '@' #move player to next position
+    data2[(y+2*dy) * nrows + x+2*dx] = '*' #move box to goal
     return "".join(data2)
  
 def is_solved(data):
@@ -45,29 +49,33 @@ def is_solved(data):
 def solve():
     open = deque([(ddata, "", px, py)])
     visited = set([ddata])
-    dirs = ((0, -1, 'u', 'U'), ( 1, 0, 'r', 'R'),
+    dirs = ((0, -1, 'u', 'U'), ( 1, 0, 'r', 'R'),  #possilble directions and their corresponding coordinates
             (0,  1, 'd', 'D'), (-1, 0, 'l', 'L'))
  
     lnrows = nrows
     while open:
         cur, csol, x, y = open.popleft()
  
-        for di in dirs:
+        for di in dirs: #exploring the result of each direction
             temp = cur
             dx, dy = di[0], di[1]
  
-            if temp[(y+dy) * lnrows + x+dx] == '*':
-                temp = push(x, y, dx, dy, temp)
+            if temp[(y+dy) * lnrows + x+dx] == '*': #checks if the move places a block to goal
+                temp = push(x, y, dx, dy, temp) #make the move
                 if temp and temp not in visited:
                     if is_solved(temp):
+                        #if solved then add the last move to soultion and return
                         return csol + di[3]
+                    #if not solved then append new state to explore
                     open.append((temp, csol + di[3], x+dx, y+dy))
                     visited.add(temp)
             else:
+                #if player runs into a wall then ignore
                 if sdata[(y+dy) * lnrows + x+dx] == '#' or \
                    temp[(y+dy) * lnrows + x+dx] != ' ':
                     continue
                 
+                #else if player does legal move then perform it
                 data2 = list(temp)
                 data2[y * lnrows + x] = ' '
                 data2[(y+dy) * lnrows + x+dx] = '@'

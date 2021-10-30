@@ -3,14 +3,13 @@ const context = canvas.getContext('2d');
 
 const grid = 64
 var moves=0;
-var desired_block=10;
+//var desired_block=10;
 var moves_track= new Array()
 // create a new canvas and draw the wall image. then we can use this
 // canvas to draw the images later on
 const wallCanvas = document.createElement('canvas');
 const wallCtx = wallCanvas.getContext('2d');
 wallCanvas.width = wallCanvas.height = grid;
-
 wallCtx.fillStyle = '#808080';
 wallCtx.fillRect(0, 0, grid, grid);
 wallCtx.fillStyle = '#383838';
@@ -35,7 +34,7 @@ let rAF = null;  // keep track of the animation frame so we can cancel it
 let width = 0;  // find the largest row and use that as the game width
 
 // create a mapping of object types using the sok file format
-// @see http://www.sokobano.de/wiki/index.php?title=Level_format
+
 const types = {
   wall: '#',
   player: '@',
@@ -298,12 +297,12 @@ function loop() {
     showWin();
   }
 
-  if(allBlocksOnGoals)
-  {
-    desired_block=desired_block+1;
-  }
+  // if(allBlocksOnGoals)
+  // {
+  //   desired_block=desired_block+1;
+  // }
   document.getElementById("mytext").value=moves;
-  document.getElementById("myblock").value=desired_block;
+ // document.getElementById("myblock").value=desired_block;
 }
 
 function solve(test)
@@ -398,15 +397,19 @@ document.addEventListener('keydown', function(e) {
   }
 });
 var c=0;
+
 send_level(current)
 function play()
 {
+  
+  //location.reload()
   moves=moves-1
-  desired_block=desired_block-1
+ // desired_block=desired_block-1
   if(moves>0)
   {
     moves=moves-1
   }
+
   solve(solution[i]);  
 
   i=i+1;
@@ -449,7 +452,6 @@ function undo()
 
 function next()
 {
-  current=level2
   if(window.name==2)
   {
     window.name=3
